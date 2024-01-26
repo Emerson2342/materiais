@@ -80,7 +80,7 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
     if (nomeItem !== "") {
       // Verificar se o produto já existe em alguma lista
       const produtoExistente = [
-        ...eletrica,
+        ...eletrica, ...aguaFria, ...aguaQuente, ...esgoto
 
         // Adicione outras listas conforme necessário
       ].find((item) => item.produto === nomeItem);
@@ -91,7 +91,14 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
         ]);
       } else {
         // Determine qual função de atualização do estado usar com base no tipo
-        const updateStateFunction = tipo === "Eletrica" ? setEletrica : null;
+        const updateStateFunction =
+          tipo === "Eletrica" ? setEletrica :
+            tipo === "AguaFria" ? setAguaFria
+              : tipo === "AguaQuente"
+                ? setAguaQuente
+                : tipo === "Esgoto"
+                  ? setEsgoto
+                  : null;
 
         if (updateStateFunction) {
           // Se a função de atualização do estado for válida, faça a atualização

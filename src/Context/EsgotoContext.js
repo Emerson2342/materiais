@@ -15,18 +15,12 @@ export const EsgotoContextProvider = ({ children }) => {
     const [esgoto, setEsgoto] = useState([
         { tipo: "Esgoto", produto: "Caixa Gordura 300mmx100mm", valor: 350.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Cap PVC Esgoto 1.1/2' 40mm", valor: 3.99, quantidade: 1 },
-        { tipo: "Esgoto", produto: "Cap PVC Esgoto 2' 50mm", valor: 5.99, quantidade: 1 },
-        { tipo: "Esgoto", produto: "Cap PVC Esgoto 2' 75mm", valor: 9.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Cap PVC Esgoto 4' 100mm", valor: 10.99, quantidade: 1 },
-        { tipo: "Esgoto", produto: "Curva Curta 90º PVC Esgoto 2' 50mm", valor: 10.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Curva Curta 90º PVC Esgoto 3' 75mm", valor: 26.99, quantidade: 1 },
-        { tipo: "Esgoto", produto: "Curva Curta 90º PVC Esgoto 4' 100mm", valor: 25.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Curvar 45º PVC Esgoto 4' 100mm", valor: 46.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Joelho 90º PVC Esgoto 6' 150mm", valor: 57.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Jução Red PVD Esgoto 6' 150 mm x 4' 100mm", valor: 68.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Luva de Correr PVD Esgoto 2' 50mm", valor: 15.99, quantidade: 1 },
-        { tipo: "Esgoto", produto: "Luva de Correr PVD Esgoto 3' 75mm", valor: 16.99, quantidade: 1 },
-        { tipo: "Esgoto", produto: "Luva de Correr PVD Esgoto 4' 100mm", valor: 18.99, quantidade: 1 },
         { tipo: "Esgoto", produto: "Caixa de Fundo", valor: 25.99, quantidade: 1 },
 
     ]);

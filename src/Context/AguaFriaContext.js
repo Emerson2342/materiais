@@ -14,14 +14,9 @@ export const useAguaFriaContext = () => {
 export const AguaFriaContextProvider = ({ children }) => {
     const [aguaFria, setAguaFria] = useState([
         { tipo: "AguaFria", produto: "Tubo Soldável 20mm", valor: 4.99, quantidade: 1 },
-        { tipo: "AguaFria", produto: "Tubo Soldável 25mm", valor: 4.30, quantidade: 1 },
-        { tipo: "AguaFria", produto: "Tubo Soldável 32mm", valor: 10.99, quantidade: 1 },
-        { tipo: "AguaFria", produto: "Tubo Soldável 50mm", valor: 26.99, quantidade: 1 },
-        { tipo: "AguaFria", produto: "Luva Soldável 110mm", valor: 1.99, quantidade: 1 },
         { tipo: "AguaFria", produto: "Registro Soldável Esfera 20mm", valor: 19.99, quantidade: 1 },
         { tipo: "AguaFria", produto: "Curva 90º Soldável 25mm", valor: 3.99, quantidade: 1 },
         { tipo: "AguaFria", produto: "Joelho 90º Soldável 50mm", valor: 6.99, quantidade: 1 },
-        { tipo: "AguaFria", produto: "Joelho 90º Soldável 25mm", valor: 1.99, quantidade: 1 },
         { tipo: "AguaFria", produto: "Te Red Soldável 50x25", valor: 12.99, quantidade: 1 },
         { tipo: "AguaFria", produto: "Cap Soldável 25mm", valor: 1.99, quantidade: 1 },
         { tipo: "AguaFria", produto: "Plug com Rosca 1/2' Branco", valor: 1.99, quantidade: 1 },

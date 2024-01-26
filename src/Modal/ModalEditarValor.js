@@ -15,7 +15,7 @@ import { useAguaQuenteContext } from "../Context/AguaQuenteContext";
 import { useEsgotoContext } from "../Context/EsgotoContext";
 import { useListaDeMateriaisContext } from "../Context/ListaDeMateriaisContext";
 
-export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
+export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar }) {
   const { eletrica, setEletrica } = useEletricaContext();
   const { carrinho, setCarrinho } = useCarrinhoContext();
   const { aguaFria, setAguaFria } = useAguaFriaContext();
@@ -38,20 +38,20 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         tipo === "Eletrica"
           ? eletrica[indexDoItemAEditar]
           : tipo === "Carrinho"
-          ? carrinho[indexDoItemAEditar]
-          : tipo === "AguaFria"
-          ? aguaFria[indexDoItemAEditar]
-          : tipo === "AguaQuente"
-          ? aguaQuente[indexDoItemAEditar]
-          : tipo === "Esgoto"
-          ? esgoto[indexDoItemAEditar]
-          : tipo === "ListaDeMateriais"
-          ? listaDeMateriais[indexDoItemAEditar]
-          : null;
+            ? carrinho[indexDoItemAEditar]
+            : tipo === "AguaFria"
+              ? aguaFria[indexDoItemAEditar]
+              : tipo === "AguaQuente"
+                ? aguaQuente[indexDoItemAEditar]
+                : tipo === "Esgoto"
+                  ? esgoto[indexDoItemAEditar]
+                  : tipo === "ListaDeMateriais"
+                    ? listaDeMateriais[indexDoItemAEditar]
+                    : null;
 
       if (itemAEditar) {
         setNovoItem({ ...itemAEditar });
-        // setNovoItem({ tipo, produto, valor, quantidade, cart });
+        // setNovoItem({ tipo, produto, valor, quantidade});
       }
     }
   }, [
@@ -80,16 +80,16 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         tipo === "Eletrica"
           ? [...eletrica]
           : tipo === "Carrinho"
-          ? [...carrinho]
-          : tipo === "AguaFria"
-          ? [...aguaFria]
-          : tipo === "AguaQuente"
-          ? [...aguaQuente]
-          : tipo === "Esgoto"
-          ? [...esgoto]
-          : tipo === "ListaDeMateriais"
-          ? [...listaDeMateriais]
-          : [];
+            ? [...carrinho]
+            : tipo === "AguaFria"
+              ? [...aguaFria]
+              : tipo === "AguaQuente"
+                ? [...aguaQuente]
+                : tipo === "Esgoto"
+                  ? [...esgoto]
+                  : tipo === "ListaDeMateriais"
+                    ? [...listaDeMateriais]
+                    : [];
 
       // Atualize o valor do item específico na cópia da lista
       novaLista[indexDoItemAEditar] = { ...novoItem };
@@ -116,7 +116,6 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         produto: "",
         valor: "",
         quantidade: 1,
-        cart: false,
       });
 
       // Feche o modal
@@ -131,7 +130,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.precoInputer}>
+        {/* <View style={styles.precoInputer}>
           <TextInput
             style={styles.input}
             value={novoItem.produto}
@@ -142,7 +141,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
               }))
             }
           />
-        </View>
+        </View> */}
         <View style={styles.precoInputer}>
           <Text style={styles.cifra}>R$</Text>
           <TextInput

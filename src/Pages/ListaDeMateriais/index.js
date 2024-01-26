@@ -12,7 +12,8 @@ import {
 
 import { useNavigation } from "@react-navigation/native";
 
-import ModalEditar from "../../Modal/ModalEditar";
+import ModalEditarNome from "../../Modal/ModalEditarNome";
+import ModalEditarValor from "../../Modal/ModalEditarValor";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { useListaDeMateriaisContext } from "../../Context/ListaDeMateriaisContext";
 import * as Print from "expo-print";
@@ -152,41 +153,28 @@ const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
                     <th style="width: 5%;">Ord</th>
                     <th style="width: 5%;">Qtd</th>
                     <th style="width: 40%;">Produto</th>
-                    <th style="width: 15%;">Valor</th>
-                    <th style="width: 20%;">Valor Final</th>
-                </tr>
+                  </tr>
             </thead>
             <tbody> 
                         ${listaDeMateriais
-                          .map(
-                            (item, index) => `
+      .map(
+        (item, index) => `
                             <tr key=${index}>
                                 <td >${index + 1}</td>
                                 <td>${item.quantidade}</td>
                                 <td style="text-align:left">${item.produto}</td>
-                                <td>R$ ${item.valor}</td>
-                                <td>R$ ${item.valor * item.quantidade}</td>
-                            </tr>
+                                                            </tr>
                         `
-                          )
-                          .join("")}
+      )
+      .join("")}
                         </tbody>
     </table>
     <br>
-    <hr>
-    <div class="resumo">
-        <p style="font-size: 30px;font-weight: bold;">Total</p>
-        <p style="font-size: 30px;font-weight: bold;"> R$
-                            ${total.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}</p>
-                        </div>
+   
                         <div class="data">
                         <p style="font-size: large;">Brasília, 17 de Janeiro de 2024</p>
                         <p>Validade do Orçamento: 30 dias</p>
-                        <p>Validade dos Serviços: 30 dias</p>
-                    </div>
+                                           </div>
                 </body>
                 
                 </html>
@@ -199,6 +187,7 @@ export default function ListaDeMateriais() {
   const { listaDeMateriais, setListaDeMateriais } =
     useListaDeMateriaisContext();
 
+  const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
 
@@ -387,11 +376,22 @@ export default function ListaDeMateriais() {
         </View>
       </View>
       <Modal
+        visible={modalVisibleNome}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalEditarNome
+          handleClose={() => setModalVisibleNome(false)}
+          tipo={"ListaDeMateriais"}
+          indexDoItemAEditar={indexDoItemAEditar}
+        />
+      </Modal>
+      <Modal
         visible={modalVisibleValor}
         animationType="fade"
         transparent={true}
       >
-        <ModalEditar
+        <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
           tipo={"ListaDeMateriais"}
           indexDoItemAEditar={indexDoItemAEditar}
@@ -470,11 +470,22 @@ export default function ListaDeMateriais() {
         </TouchableOpacity>
       </View>
       <Modal
+        visible={modalVisibleNome}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalEditarNome
+          handleClose={() => setModalVisibleNome(false)}
+          tipo={"Carrinho"}
+          indexDoItemAEditar={indexDoItemAEditar}
+        />
+      </Modal>
+      <Modal
         visible={modalVisibleValor}
         animationType="fade"
         transparent={true}
       >
-        <ModalEditar
+        <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
           tipo={"Carrinho"}
           indexDoItemAEditar={indexDoItemAEditar}

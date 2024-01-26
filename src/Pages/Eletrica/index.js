@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ModalAdicionar from "../../Modal/ModalAdicionar";
-import ModalEditar from "../../Modal/ModalEditar";
+import ModalEditarNome from "../../Modal/ModalEditarNome";
+import ModalEditarValor from "../../Modal/ModalEditarValor";
 import {
   View,
   Text,
@@ -18,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 import { useListaDeMateriaisContext } from "../../Context/ListaDeMateriaisContext";
 
+
 export default function Eletrica() {
   const navigation = useNavigation();
 
@@ -28,6 +30,7 @@ export default function Eletrica() {
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
+  const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
   const [numColumns, setNumColumns] = useState(1);
 
@@ -42,9 +45,13 @@ export default function Eletrica() {
     setModalVisibleAdd(true);
   };
 
-  const editarProduto = (index) => {
+  const editarValor = (index) => {
     setIndexDoItemAEditar(index);
     setModalVisibleValor(true);
+  };
+  const editarNome = (index) => {
+    setIndexDoItemAEditar(index);
+    setModalVisibleNome(true);
   };
 
   const removerItem = (indexToRemove) => {
@@ -81,6 +88,7 @@ export default function Eletrica() {
       Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
     }
   };
+
 
   const addAoListaDeMateriais = (index) => {
     const item = eletrica[index];
@@ -122,16 +130,18 @@ export default function Eletrica() {
 
   const renderItem = ({ item, index }) => (
     <View style={styles.eletricaContainer}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Text style={styles.textProduto}>
-          {index + 1}-{item.produto}
-        </Text>
-        <View>
+
+      <View >
+        <TouchableOpacity onPress={() => editarNome(index)}>
+          <Text numberOfLines={1} style={styles.textProduto}>
+            {index + 1}-{item.produto}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+
+      <View style={styles.iconContainer}>
+        <TouchableOpacity onPress={() => editarValor(index)}>
           <Text style={styles.textPreco}>
             R$
             {(item.valor * (1 || 1)).toLocaleString("pt-BR", {
@@ -139,20 +149,12 @@ export default function Eletrica() {
               maximumFractionDigits: 2,
             })}
           </Text>
-        </View>
-      </View>
-      <View style={styles.iconContainer}>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconContent}
           onPress={() => addAoCarrinho(index)}
         >
           <MaterialIcons name="shopping-cart" size={30} color="#6495ED" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.iconContent}
-          onPress={() => editarProduto(index)}
-        >
-          <AntDesign name="edit" size={30} color="green" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => addAoListaDeMateriais(index)}>
           <Image
@@ -167,7 +169,8 @@ export default function Eletrica() {
           <MaterialIcons name="close" size={30} color="red" />
         </TouchableOpacity>
       </View>
-    </View>
+
+    </View >
   );
   return (
     <View>
@@ -212,11 +215,23 @@ export default function Eletrica() {
       </Modal>
 
       <Modal
+        visible={modalVisibleNome}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalEditarNome
+          handleClose={() => setModalVisibleNome(false)}
+          tipo="Eletrica"
+          indexDoItemAEditar={indexDoItemAEditar}
+        />
+
+      </Modal>
+      <Modal
         visible={modalVisibleValor}
         animationType="fade"
         transparent={true}
       >
-        <ModalEditar
+        <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
           tipo="Eletrica"
           indexDoItemAEditar={indexDoItemAEditar}
@@ -249,29 +264,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     width: "94%",
   },
+
   textProduto: {
     color: "#0045b1",
     top: -10,
-    fontSize: 25,
-    flexWrap: "wrap",
-    width: "75%",
+    fontSize: 23,
   },
   textPreco: {
     fontWeight: "bold",
     color: "#0099cd",
     fontSize: 20,
-    top: -10,
   },
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingLeft: 5,
     paddingRight: 5,
-    bottom: -5,
+    bottom: -10,
   },
 
   button: {
-    marginTop: 10,
+    marginTop: 20,
     justifyContent: "space-between",
     alignItems: "center",
     width: "60%",
@@ -282,6 +295,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     top: 480,
+    zIndex: 4,
   },
 
   buttonText: {

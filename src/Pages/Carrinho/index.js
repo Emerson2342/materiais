@@ -9,13 +9,15 @@ import {
     TouchableOpacity,
 } from "react-native";
 
-import ModalEditar from "../../Modal/ModalEditar";
+import ModalEditarNome from "../../Modal/ModalEditarNome";
+import ModalEditarValor from "../../Modal/ModalEditarValor";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 
 export default function Carrinho() {
     const { carrinho, setCarrinho } = useCarrinhoContext();
 
+    const [modalVisibleNome, setModalVisibleNome] = useState(false);
     const [modalVisibleValor, setModalVisibleValor] = useState(false);
     const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
 
@@ -199,11 +201,22 @@ export default function Carrinho() {
                 </View>
             </View>
             <Modal
+                visible={modalVisibleNome}
+                animationType="fade"
+                transparent={true}
+            >
+                <ModalEditarNome
+                    handleClose={() => setModalVisibleNome(false)}
+                    tipo={"Carrinho"}
+                    indexDoItemAEditar={indexDoItemAEditar}
+                />
+            </Modal>
+            <Modal
                 visible={modalVisibleValor}
                 animationType="fade"
                 transparent={true}
             >
-                <ModalEditar
+                <ModalEditarValor
                     handleClose={() => setModalVisibleValor(false)}
                     tipo={"Carrinho"}
                     indexDoItemAEditar={indexDoItemAEditar}

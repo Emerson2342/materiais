@@ -209,6 +209,11 @@ export default function ListaDeMateriais() {
     setModalVisibleValor(true);
   };
 
+  const editarNome = (index) => {
+    setIndexDoItemAEditar(index);
+    setModalVisibleNome(true);
+  };
+
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
     const novoArray = listaDeMateriais.filter(
@@ -282,22 +287,23 @@ export default function ListaDeMateriais() {
   const renderItem = ({ item, index }) => (
     <View style={styles.listaContainer}>
       {/* Nome Produto + valor */}
-      <TouchableOpacity
+      <View
         style={styles.superior}
-        onLongPress={() => confirmarApagarItem(index)}
       >
-        <View style={styles.nomeProduto}>
+        <TouchableOpacity onPress={() => editarNome(index)} style={styles.nomeProduto}>
           {item.produto && item.produto.trim() !== "" && (
             <Text style={styles.textLista}>
               {index + 1} - {item.produto}
             </Text>
           )}
-        </View>
+        </TouchableOpacity>
         <View style={styles.unidadeProduto}>
           <View>
             <Text style={styles.textUnidade}>Unidade</Text>
           </View>
-          <View>
+          <TouchableOpacity
+            onPress={() => editarValor(index)}
+          >
             <Text style={styles.textUnidade}>
               R$
               {(item.valor * 1 || 0).toLocaleString("pt-BR", {
@@ -305,9 +311,9 @@ export default function ListaDeMateriais() {
                 maximumFractionDigits: 2,
               })}
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      </View>
 
       {/* Apagar produto + quantidade + valor final*/}
       <View style={styles.inferior}>
@@ -316,14 +322,9 @@ export default function ListaDeMateriais() {
             style={{ alignSelf: "center" }}
             onPress={() => confirmarApagarItem(index)}
           >
-            <MaterialIcons name="remove-shopping-cart" size={20} color="red" />
+            <MaterialIcons name="remove-shopping-cart" size={30} color="red" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.iconContent}
-            onPress={() => editarValor(index)}
-          >
-            <AntDesign name="edit" size={30} color="green" />
-          </TouchableOpacity>
+
         </View>
 
         <View style={styles.quantidade}>
@@ -476,7 +477,7 @@ export default function ListaDeMateriais() {
       >
         <ModalEditarNome
           handleClose={() => setModalVisibleNome(false)}
-          tipo={"Carrinho"}
+          tipo={"ListaDeMateriais"}
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -487,7 +488,7 @@ export default function ListaDeMateriais() {
       >
         <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo={"Carrinho"}
+          tipo={"ListaDeMateriais"}
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>

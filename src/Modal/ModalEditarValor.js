@@ -189,27 +189,39 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   input: {
+    width: "80%",
     fontSize: 25,
   },
   precoInputer: {
     flexDirection: "row",
+    borderWidth: 1,
+    width: "85%",
+    borderRadius: 7,
+    height: 50,
+    borderColor: "#2506ec"
   },
   cifra: {
-    fontSize: 20,
+    width: "20%",
+    fontSize: 25,
+    textAlign: "right",
+    alignSelf: "center"
+
   },
   buttonArea: {
     flexDirection: "row",
     width: "85%",
     marginTop: 8,
-    //alignItems: "center",
     justifyContent: "space-between",
   },
   button: {
-    flex: 1,
+    width: "45%",
     alignItems: "center",
     marginTop: 14,
     marginBottom: 14,
     padding: 8,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: "#2506ec"
   },
   buttonSave: {
     backgroundColor: "#2506ec",

@@ -165,7 +165,7 @@ export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar
             style={[styles.button, styles.buttonSave]}
             onPress={alterarProduto}
           >
-            <Text style={styles.buttonSaveText}>Salvar Item</Text>
+            <Text style={styles.buttonSaveText}>Salvar Valor</Text>
           </TouchableOpacity>
         </View>
       </View>

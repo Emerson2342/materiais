@@ -15,14 +15,14 @@ import { useNavigation } from "@react-navigation/native";
 import ModalEditarNome from "../../Modal/ModalEditarNome";
 import ModalEditarValor from "../../Modal/ModalEditarValor";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
-import { useListaDeMateriaisContext } from "../../Context/ListaDeMateriaisContext";
+import { useOrcamentoContext } from "../../Context/OrcamentoContext";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 
-const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
+const OrcamentoHtml = ({ orcamento }) => {
 
-  const total = listaDeMateriais.reduce(
+  const total = orcamento.reduce(
     (acc, item) => acc + item.valor * item.quantidade,
     0
   );
@@ -149,7 +149,7 @@ const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
                   </tr>
             </thead>
             <tbody> 
-                        ${listaDeMateriais
+                        ${orcamento
       .map(
         (item, index) => `
                             <tr key=${index}>
@@ -174,17 +174,28 @@ const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
     `;
 };
 
-export default function ListaDeMateriais() {
+export default function Orcamento() {
   const navigation = useNavigation();
 
-  const { listaDeMateriais, setListaDeMateriais } =
-    useListaDeMateriaisContext();
+  const { orcamento, setOrcamento } =
+    useOrcamentoContext();
 
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
 
   const [total, setTotal] = useState(0);
+
+  const exibirOrcamento = () => {
+    const mensagem = orcamento
+      .map((item, index) => {
+        return `Produto: ${item.produto}\nPreço: R$ ${item.valor}\nQuantidade: ${item.quantidade}\n
+-----------------------------------------------------------------`;
+      })
+      .join("\n");
+
+    Alert.alert("Informações dos Itens", mensagem);
+  };
 
   const editarValor = (index) => {
     setIndexDoItemAEditar(index);
@@ -198,16 +209,16 @@ export default function ListaDeMateriais() {
 
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = listaDeMateriais.filter(
+    const novoArray = orcamento.filter(
       (item, index) => index !== indexToRemove
     );
 
     // Atualizar o estado com o novo array
-    setListaDeMateriais(novoArray);
+    setOrcamento(novoArray);
   };
 
-  const limparListaDeMateriais = () => {
-    setListaDeMateriais([]);
+  const limparOrcamento = () => {
+    setOrcamento([]);
   };
 
   const confirmarApagarItem = (indexToRemove) => {
@@ -217,41 +228,41 @@ export default function ListaDeMateriais() {
     ]);
   };
 
-  const confirmarApagarListaDeMateriais = (index) => {
-    Alert.alert("", "Deseja apagar todos os itens do listaDeMateriais?", [
+  const confirmarApagarOrcamento = (index) => {
+    Alert.alert("", "Deseja apagar todos os itens do orcamento?", [
       { text: "Não", onPress: () => console.log("Cancelada Exclusão") },
-      { text: "Sim", onPress: () => limparListaDeMateriais() },
+      { text: "Sim", onPress: () => limparOrcamento() },
     ]);
   };
 
   const handleIncrement = (index) => {
-    setListaDeMateriais((prevListaDeMateriais) => {
-      const novoListaDeMateriais = [...prevListaDeMateriais];
-      novoListaDeMateriais[index].quantidade += 1;
+    setOrcamento((prevOrcamento) => {
+      const novoOrcamento = [...prevOrcamento];
+      novoOrcamento[index].quantidade += 1;
       // Garante que a quantidade mínima seja 1
-      novoListaDeMateriais[index].quantidade = Math.max(
-        novoListaDeMateriais[index].quantidade,
+      novoOrcamento[index].quantidade = Math.max(
+        novoOrcamento[index].quantidade,
         1
       );
-      return novoListaDeMateriais;
+      return novoOrcamento;
     });
   };
 
   const handleDecrement = (index) => {
-    setListaDeMateriais((prevListaDeMateriais) => {
-      const novoListaDeMateriais = [...prevListaDeMateriais];
-      novoListaDeMateriais[index].quantidade = Math.max(
-        novoListaDeMateriais[index].quantidade - 1,
+    setOrcamento((prevOrcamento) => {
+      const novoOrcamento = [...prevOrcamento];
+      novoOrcamento[index].quantidade = Math.max(
+        novoOrcamento[index].quantidade - 1,
         1
       );
-      return novoListaDeMateriais;
+      return novoOrcamento;
     });
   };
 
-  const calcularTotalListaDeMateriais = () => {
+  const calcularTotalOrcamento = () => {
     let novoTotal = 0;
 
-    for (const item of listaDeMateriais) {
+    for (const item of orcamento) {
       // Certifique-se de que o item tem as propriedades valor e quantidade
       if (item.valor !== undefined && item.quantidade !== undefined) {
         novoTotal += item.valor * item.quantidade;
@@ -262,9 +273,9 @@ export default function ListaDeMateriais() {
   };
 
   useEffect(() => {
-    // Chame a função para calcular o total sempre que o listaDeMateriais for alterado
-    calcularTotalListaDeMateriais();
-  }, [listaDeMateriais]);
+    // Chame a função para calcular o total sempre que o orcamento for alterado
+    calcularTotalOrcamento();
+  }, [orcamento]);
 
   const renderItem = ({ item, index }) => (
     <View style={styles.listaContainer}>
@@ -272,20 +283,42 @@ export default function ListaDeMateriais() {
       <View
         style={styles.superior}
       >
-        <TouchableOpacity
-          onPress={() => editarNome(index)}
-          style={styles.nomeProduto}>
+        <TouchableOpacity onPress={() => editarNome(index)} style={styles.nomeProduto}>
           {item.produto && item.produto.trim() !== "" && (
             <Text style={styles.textLista}>
               {index + 1} - {item.produto}
             </Text>
           )}
         </TouchableOpacity>
+        <View style={styles.unidadeProduto}>
+          <View>
+            <Text style={styles.textUnidade}>Unidade</Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => editarValor(index)}
+          >
+            <Text style={styles.textUnidade}>
+              R$
+              {(item.valor * 1 || 0).toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Apagar produto + quantidade + valor final*/}
       <View style={styles.inferior}>
+        <View style={styles.editarProduto}>
+          <TouchableOpacity
+            style={{ alignSelf: "center" }}
+            onPress={() => confirmarApagarItem(index)}
+          >
+            <MaterialIcons name="remove-shopping-cart" size={30} color="red" />
+          </TouchableOpacity>
 
+        </View>
 
         <View style={styles.quantidade}>
           <TouchableOpacity
@@ -302,7 +335,7 @@ export default function ListaDeMateriais() {
 
           <View style={styles.multiplicar}>
             <Text style={styles.textMultiplicar}>
-              {listaDeMateriais[index].quantidade || 1}
+              {orcamento[index].quantidade || 1}
             </Text>
           </View>
 
@@ -317,16 +350,23 @@ export default function ListaDeMateriais() {
               style={{ textAlign: "center" }}
             />
           </TouchableOpacity>
-
         </View>
-        <View style={styles.editarProduto}>
-          <TouchableOpacity
-            style={{ alignSelf: "center" }}
-            onPress={() => confirmarApagarItem(index)}
-          >
-            <MaterialIcons name="close" size={30} color="red" />
-          </TouchableOpacity>
-
+        <View style={styles.valorFinal}>
+          {item.valor !== undefined && (
+            <View>
+              <View>
+                <Text style={styles.textTotal}>
+                  R$
+                  {(
+                    item.valor * (orcamento[index].quantidade || 1)
+                  ).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
       </View>
       <Modal
@@ -336,7 +376,7 @@ export default function ListaDeMateriais() {
       >
         <ModalEditarNome
           handleClose={() => setModalVisibleNome(false)}
-          tipo={"ListaDeMateriais"}
+          tipo={"Orcamento"}
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -347,7 +387,7 @@ export default function ListaDeMateriais() {
       >
         <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo={"ListaDeMateriais"}
+          tipo={"Orcamento"}
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -357,23 +397,23 @@ export default function ListaDeMateriais() {
   const gerarPDF = async () => {
     try {
       /*  const file = await Print.printToFileAsync({
-                 html: ListaDeMateriaisHtml,
+                 html: OrcamentoHtml,
                  base64: false */
-      const htmlString = ListaDeMateriaisHtml({ listaDeMateriais });
+      const htmlString = OrcamentoHtml({ orcamento });
       const file = await Print.printToFileAsync({
         html: htmlString,
         base64: false,
       });
       // Diretório onde você quer salvar o PDF
-      const pastaListaDeMateriaissSalvos = `${FileSystem.documentDirectory}assets/`;
+      const pastaOrcamentosSalvos = `${FileSystem.documentDirectory}assets/`;
 
       // Garantir que o diretório exista
-      await FileSystem.makeDirectoryAsync(pastaListaDeMateriaissSalvos, {
+      await FileSystem.makeDirectoryAsync(pastaOrcamentosSalvos, {
         intermediates: true,
       });
 
       // Caminho para o arquivo no diretório específico
-      const caminhoNoDiretorio = `${pastaListaDeMateriaissSalvos}ListaDeMateriais.pdf`;
+      const caminhoNoDiretorio = `${pastaOrcamentosSalvos}Orcamento.pdf`;
 
       // Mover o arquivo para o diretório específico
       await FileSystem.moveAsync({
@@ -390,9 +430,9 @@ export default function ListaDeMateriais() {
   return (
     <View>
       <View style={styles.container}>
-        {/* <HTML source={{ html: ListaDeMateriaisHtml({ listaDeMateriais }) }} contentWidth={300} /> */}
+        {/* <HTML source={{ html: OrcamentoHtml({ orcamento }) }} contentWidth={300} /> */}
         <FlatList
-          data={listaDeMateriais}
+          data={orcamento}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={1} // Configura o número de colunas
@@ -404,11 +444,21 @@ export default function ListaDeMateriais() {
         </TouchableOpacity>
       </View>
       <View style={styles.resumo}>
+        <View style={styles.resumoContent}>
+          <Text style={styles.textText}>TOTAL</Text>
+          <Text style={[styles.textTotal, { fontSize: 30 }]}>
+            R${" "}
+            {total.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Text>
+        </View>
       </View>
       <View style={{ position: "absolute", alignSelf: "center" }}>
         <TouchableOpacity
           style={styles.buttonLimpar}
-          onPress={confirmarApagarListaDeMateriais}
+          onPress={confirmarApagarOrcamento}
         >
           <Text style={styles.buttonText}>Limpar Lista de Materiais</Text>
         </TouchableOpacity>
@@ -420,7 +470,7 @@ export default function ListaDeMateriais() {
       >
         <ModalEditarNome
           handleClose={() => setModalVisibleNome(false)}
-          tipo={"ListaDeMateriais"}
+          tipo={"Orcamento"}
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -431,7 +481,7 @@ export default function ListaDeMateriais() {
       >
         <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo={"ListaDeMateriais"}
+          tipo={"Orcamento"}
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -514,7 +564,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   nomeProduto: {
-    width: "100%",
+    width: "65%",
   },
   unidadeProduto: {
     width: "35%",
@@ -553,6 +603,11 @@ const styles = StyleSheet.create({
     margin: 10,
     width: "93%",
     flexDirection: "row",
+  },
+  resumoContent: {
+    alignItems: "flex-end",
+    width: "100%",
+    borderBottomWidth: 1,
   },
   textText: {
     fontSize: 15,

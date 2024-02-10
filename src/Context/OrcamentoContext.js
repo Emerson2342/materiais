@@ -1,26 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const CarrinhoContext = createContext();
+const OrcamentoContext = createContext();
 
 //useMyContext
 //MyContext
 //MyContextProvider
 
-export const useCarrinhoContext = () => {
-    return useContext(CarrinhoContext);
+export const useOrcamentoContext = () => {
+    return useContext(OrcamentoContext);
 };
 
-export const CarrinhoContextProvider = ({ children }) => {
-    const [carrinho, setCarrinho] = useState([]);
+export const OrcamentoContextProvider = ({ children }) => {
+    const [orcamento, setOrcamento] = useState([]);
 
     // Carregar os dados do AsyncStorage quando o componente montar
     useEffect(() => {
         const loadAsyncData = async () => {
             try {
-                const storedData = await AsyncStorage.getItem("carrinho");
+                const storedData = await AsyncStorage.getItem("orcamento");
                 if (storedData) {
-                    setCarrinho(JSON.parse(storedData));
+                    setOrcamento(JSON.parse(storedData));
                 }
             } catch (error) {
                 console.error("Erro ao carregar dados do AsyncStorage:", error);
@@ -34,18 +34,18 @@ export const CarrinhoContextProvider = ({ children }) => {
     useEffect(() => {
         const saveAsyncData = async () => {
             try {
-                await AsyncStorage.setItem("carrinho", JSON.stringify(carrinho));
+                await AsyncStorage.setItem("orcamento", JSON.stringify(orcamento));
             } catch (error) {
                 console.error("Erro ao salvar dados no AsyncStorage:", error);
             }
         };
 
         saveAsyncData();
-    }, [carrinho]);
+    }, [orcamento]);
 
     return (
-        <CarrinhoContext.Provider value={{ carrinho, setCarrinho }}>
+        <OrcamentoContext.Provider value={{ orcamento, setOrcamento }}>
             {children}
-        </CarrinhoContext.Provider>
+        </OrcamentoContext.Provider>
     );
 };

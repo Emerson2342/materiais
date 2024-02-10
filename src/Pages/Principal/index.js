@@ -10,66 +10,44 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import "react-native-gesture-handler";
 
-const data = [
-    { id: "1", category: "Elétrica" },
-    { id: "2", category: "Água Fria" },
-    { id: "3", category: "Água Quente" },
-    { id: "4", category: "Esgoto" },
-];
-
 export default function Principal() {
     const navigation = useNavigation();
 
-    const navigateToPage = (pageName) => {
-        navigation.navigate(pageName);
-    };
-
-    const imageMapping = {
-        'Elétrica': require("../../../assets/images/eletrica.jpg"),
-        'Água Fria': require("../../../assets/images/aguaFria.jpg"),
-        "Água Quente": require("../../../assets/images/aguaQuente.jpg"),
-        'Esgoto': require("../../../assets/images/esgoto.jpg")
-    };
-
-
-
-    const renderItem = ({ item }) => (
-        <TouchableOpacity
-            style={styles.lista}
-            onPress={() => navigateToPage(item.category)}
-        >
-            <ImageBackground source={imageMapping[item.category]} style={styles.img}>
-                <Text style={styles.text}>{item.category}</Text>
-            </ImageBackground>
-        </TouchableOpacity>
-    );
+    /*     const navigateToPage = () => {
+            navigation.navigate('Materiais');
+        };
+    
+        const imageMapping = {
+            'Materiais': require("../../../assets/images/eletrica.jpg"),
+        }; */
 
     return (
         <View style={styles.container}>
-            <View style={{ top: 30 }}>
-                <FlatList
-                    data={data}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderItem}
-                    numColumns={2}
-                />
+            <View >
+                <TouchableOpacity
+                    style={styles.lista}
+                    onPress={() => navigation.navigate("Materiais")}
+                >
+                    <ImageBackground source={require("../../../assets/images/eletrica.jpg")} style={styles.img}>
+                        <Text style={styles.text}>Materiais</Text>
+                    </ImageBackground>
+                </TouchableOpacity>
             </View>
 
 
             <Text style={{ position: "absolute", top: 615, color: "#2506ec" }}>By: MiSsiNhOo</Text>
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate("Carrinho")}
-            >
-                <Text style={styles.buttonText}>Itens do Carrinho</Text>
-
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button}
                 onPress={() => navigation.navigate("Lista de Materiais")}
             >
                 <Text style={styles.buttonText}>Lista de Materiais</Text>
 
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigation.navigate("Orcamento")}>
+                <Text style={styles.buttonText}>Orçamento</Text>
             </TouchableOpacity>
 
 
@@ -106,7 +84,6 @@ const styles = StyleSheet.create({
         borderWidth: 3,
     },
     button: {
-        marginTop: -150,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#2506ec",
@@ -114,8 +91,8 @@ const styles = StyleSheet.create({
         padding: 15,
         width: "80%",
         alignSelf: "center",
-        // flexDirection: "row",
         elevation: 30,
+        marginVertical: 10
     },
     buttonText: {
         color: "#fff",

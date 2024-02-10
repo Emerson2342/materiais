@@ -8,21 +8,15 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 
-import { useEletricaContext } from "../Context/EletricaContext";
-import { useCarrinhoContext } from "../Context/CarrinhoContext";
-import { useAguaFriaContext } from "../Context/AguaFriaContext";
-import { useAguaQuenteContext } from "../Context/AguaQuenteContext";
-import { useEsgotoContext } from "../Context/EsgotoContext";
+import { useMateriaisContext } from "../Context/MateriaisContext";
+import { useOrcamentoContext } from "../Context/OrcamentoContext";
 import { useListaDeMateriaisContext } from "../Context/ListaDeMateriaisContext";
 
 export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar }) {
-  const { eletrica, setEletrica } = useEletricaContext();
-  const { carrinho, setCarrinho } = useCarrinhoContext();
-  const { aguaFria, setAguaFria } = useAguaFriaContext();
-  const { aguaQuente, setAguaQuente } = useAguaQuenteContext();
-  const { esgoto, setEsgoto } = useEsgotoContext();
-  const { listaDeMateriais, setListaDeMateriais } =
-    useListaDeMateriaisContext();
+
+  const { materiais, setMateriais } = useMateriaisContext();
+  const { orcamento, setOrcamento } = useOrcamentoContext();
+  const { listaDeMateriais, setListaDeMateriais } = useListaDeMateriaisContext();
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
@@ -35,19 +29,13 @@ export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar 
     // Carregar o valor atual do item a ser editado quando o modal é aberto
     if (indexDoItemAEditar !== null && indexDoItemAEditar !== undefined) {
       const itemAEditar =
-        tipo === "Eletrica"
-          ? eletrica[indexDoItemAEditar]
-          : tipo === "Carrinho"
-            ? carrinho[indexDoItemAEditar]
-            : tipo === "AguaFria"
-              ? aguaFria[indexDoItemAEditar]
-              : tipo === "AguaQuente"
-                ? aguaQuente[indexDoItemAEditar]
-                : tipo === "Esgoto"
-                  ? esgoto[indexDoItemAEditar]
-                  : tipo === "ListaDeMateriais"
-                    ? listaDeMateriais[indexDoItemAEditar]
-                    : null;
+        tipo === "Materiais"
+          ? materiais[indexDoItemAEditar]
+          : tipo === "Orcamento"
+            ? orcamento[indexDoItemAEditar]
+            : tipo === "ListaDeMateriais"
+              ? listaDeMateriais[indexDoItemAEditar]
+              : null;
 
       if (itemAEditar) {
         setNovoItem({ ...itemAEditar });
@@ -56,11 +44,8 @@ export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar 
     }
   }, [
     indexDoItemAEditar,
-    eletrica,
-    carrinho,
-    aguaFria,
-    aguaQuente,
-    esgoto,
+    materiais,
+    orcamento,
     listaDeMateriais,
     tipo,
   ]);
@@ -75,34 +60,22 @@ export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar 
     if (!isNaN(novoProduto) && novoItem.produto.trim() !== "") {
       // Crie uma cópia da lista correspondente ao tipo
       const novaLista =
-        tipo === "Eletrica"
-          ? [...eletrica]
-          : tipo === "Carrinho"
-            ? [...carrinho]
-            : tipo === "AguaFria"
-              ? [...aguaFria]
-              : tipo === "AguaQuente"
-                ? [...aguaQuente]
-                : tipo === "Esgoto"
-                  ? [...esgoto]
-                  : tipo === "ListaDeMateriais"
-                    ? [...listaDeMateriais]
-                    : [];
+        tipo === "Materiais"
+          ? [...materiais]
+          : tipo === "Orcamento"
+            ? [...orcamento]
+            : tipo === "ListaDeMateriais"
+              ? [...listaDeMateriais]
+              : [];
 
       // Atualize o valor do item específico na cópia da lista
       novaLista[indexDoItemAEditar] = { ...novoItem };
 
       // Atualize o estado com a nova lista
-      if (tipo === "Eletrica") {
-        setEletrica(novaLista);
-      } else if (tipo === "Carrinho") {
-        setCarrinho(novaLista);
-      } else if (tipo === "AguaFria") {
-        setAguaFria(novaLista);
-      } else if (tipo === "AguaQuente") {
-        setAguaQuente(novaLista);
-      } else if (tipo === "Esgoto") {
-        setEsgoto(novaLista);
+      if (tipo === "Materiais") {
+        setMateriais(novaLista);
+      } else if (tipo === "Orcamento") {
+        setOrcamento(novaLista);
       } else if (tipo === "ListaDeMateriais") {
         setListaDeMateriais(novaLista);
       }
@@ -140,20 +113,6 @@ export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar 
             }
           />
         </View>
-        {/* <View style={styles.precoInputer}>
-          <Text style={styles.cifra}>R$</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Digite o novo valor"
-            value={novoItem.valor ? novoItem.valor.toString() : ""}
-            onChangeText={(text) =>
-              setNovoItem({
-                ...novoItem,
-                valor: text.replace(",", "."),
-              })
-            }
-          />
-        </View> */}
 
         <View style={styles.buttonArea}>
           <TouchableOpacity style={styles.button} onPress={handleClose}>

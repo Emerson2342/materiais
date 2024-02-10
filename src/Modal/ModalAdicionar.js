@@ -8,16 +8,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import { useEletricaContext } from "../Context/EletricaContext";
-import { useAguaFriaContext } from "../Context/AguaFriaContext";
-import { useAguaQuenteContext } from "../Context/AguaQuenteContext";
-import { useEsgotoContext } from "../Context/EsgotoContext";
+import { useMateriaisContext } from "../Context/MateriaisContext";
+
 
 export default function ModalAdicionar({ handleClose, tipo, addItem }) {
-  const { eletrica, setEletrica } = useEletricaContext();
-  const { aguaFria, setAguaFria } = useAguaFriaContext();
-  const { aguaQuente, setAguaQuente } = useAguaQuenteContext();
-  const { esgoto, setEsgoto } = useEsgotoContext();
+  const { materiais, setMateriais } = useMateriaisContext();
+
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
@@ -26,52 +22,7 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
     quantidade: 1,
   });
 
-  /* const adicionarItem = () => {
-      const nomeItem = novoItem.produto.trim();
-      const precoItem =
-        novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0;
-  
-      if (nomeItem !== "") {
-        // Determine qual função de atualização do estado usar com base no tipo
-        const updateStateFunction =
-          tipo === "Limpeza"
-            ? setLimpeza
-            : tipo === "Bebidas"
-            ? setBebidas
-            : tipo === "Higiene"
-            ? setHigiene
-            : tipo === "Hortifruti"
-            ? setHortifruti
-            : tipo === "Temperos"
-            ? setTemperos
-            : tipo === "Carrinho"
-            ? setCarrinho // Adicione mais verificações para outros tipos, se necessário
-            : tipo === "Mercearia"
-            ? setMercearia
-            : tipo === "Acougue"
-            ? setAcougue
-            : null;
-  
-        if (updateStateFunction) {
-          // Se a função de atualização do estado for válida, faça a atualização
-          updateStateFunction((prevLista) => [
-            ...prevLista,
-            { tipo: tipo, ...novoItem },
-          ]);
-        }
-  
-        // Limpe os campos do novo item
-        setNovoItem({ tipo: tipo, produto: "", valor: "", quantidade: 1 });
-  
-        // Feche o modal
-        handleClose();
-      } else {
-        Alert.alert("", "Favor digitar um produto.", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
-      }
-    };
-   */
+
   const adicionarProduto = () => {
     const nomeItem = novoItem.produto.trim();
     const precoItem =
@@ -80,8 +31,7 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
     if (nomeItem !== "") {
       // Verificar se o produto já existe em alguma lista
       const produtoExistente = [
-        ...eletrica, ...aguaFria, ...aguaQuente, ...esgoto
-
+        ...materiais
         // Adicione outras listas conforme necessário
       ].find((item) => item.produto === nomeItem);
 
@@ -92,13 +42,8 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
       } else {
         // Determine qual função de atualização do estado usar com base no tipo
         const updateStateFunction =
-          tipo === "Eletrica" ? setEletrica :
-            tipo === "AguaFria" ? setAguaFria
-              : tipo === "AguaQuente"
-                ? setAguaQuente
-                : tipo === "Esgoto"
-                  ? setEsgoto
-                  : null;
+          tipo === "Materiais" ? setMateriais
+            : null;
 
         if (updateStateFunction) {
           // Se a função de atualização do estado for válida, faça a atualização
@@ -114,7 +59,6 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
           produto: "",
           valor: "",
           quantidade: 1,
-          cart: false,
         });
 
         // Feche o modal
@@ -140,7 +84,6 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
               produto: text,
               valor: novoItem.valor,
               quantidade: 1,
-              cart: false,
             })
           }
         />
@@ -156,7 +99,6 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
                 produto: novoItem.produto,
                 valor: text.replace(",", "."),
                 quantidade: 1,
-                cart: false,
               })
             }
           />

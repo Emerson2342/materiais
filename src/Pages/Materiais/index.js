@@ -13,26 +13,27 @@ import {
   Image,
 } from "react-native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
-import { useEsgotoContext } from "../../Context/EsgotoContext";
 import { useNavigation } from "@react-navigation/native";
 
-import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 import { useListaDeMateriaisContext } from "../../Context/ListaDeMateriaisContext";
+import { useOrcamentoContext } from "../../Context/OrcamentoContext";
+import { useMateriaisContext } from "../../Context/MateriaisContext";
 
 
-export default function Esgoto() {
+export default function Materiais() {
   const navigation = useNavigation();
 
-  const { esgoto, setEsgoto } = useEsgotoContext();
-  const { carrinho, setCarrinho } = useCarrinhoContext();
-  const { listaDeMateriais, setListaDeMateriais } =
-    useListaDeMateriaisContext();
+
+  const { listaDeMateriais, setListaDeMateriais } = useListaDeMateriaisContext();
+  const { orcamento, setOrcamento } = useOrcamentoContext();
+  const { materiais, setMateriais } = useMateriaisContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
-  const [numColumns, setNumColumns] = useState(1);
+
+  const numColumns = 1;
 
   const [novoItem, setNovoItem] = useState({
     produto: "",
@@ -56,42 +57,15 @@ export default function Esgoto() {
 
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = esgoto.filter((_, index) => index !== indexToRemove);
+    const novoArray = materiais.filter((_, index) => index !== indexToRemove);
 
     // Atualizar o estado com o novo array
-    setEsgoto(novoArray);
-  };
-
-  const addAoCarrinho = (index) => {
-    const item = esgoto[index];
-
-    if (item.valor !== "" && item.valor !== 0) {
-      // Verificar se o produto já existe no carrinho
-      const produtoExistente = carrinho.find(
-        (itemCarrinho) => itemCarrinho.produto === item.produto
-      );
-
-      if (produtoExistente) {
-        Alert.alert("", "Produto já existe no carrinho", [{ text: "Ok" }]);
-      } else {
-        // Criar uma cópia do objeto antes de modificar
-        const itemCarrinho = { ...item, cart: "Carrinho" };
-
-        // Adicionar o objeto modificado ao carrinho
-        setCarrinho([...carrinho, itemCarrinho]);
-
-        setNovoItem("", "");
-        Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-        console.log(carrinho);
-      }
-    } else {
-      Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
-    }
+    setMateriais(novoArray);
   };
 
 
   const addAoListaDeMateriais = (index) => {
-    const item = esgoto[index];
+    const item = materiais[index];
 
     if (item.valor !== "" && item.valor !== 0) {
       // Verificar se o produto já existe no carrinho
@@ -129,7 +103,7 @@ export default function Esgoto() {
   };
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.esgotoContainer}>
+    <View style={styles.materiaisContainer}>
 
       <View >
         <TouchableOpacity onPress={() => editarNome(index)}>
@@ -152,7 +126,7 @@ export default function Esgoto() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconContent}
-          onPress={() => addAoCarrinho(index)}
+        // onPress={() => addAoCarrinho(index)}
         >
           <MaterialIcons name="shopping-cart" size={30} color="#6495ED" />
         </TouchableOpacity>
@@ -176,7 +150,7 @@ export default function Esgoto() {
     <View>
       <View style={styles.container}>
         <FlatList
-          data={esgoto}
+          data={materiais}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={numColumns} // Configura o número de colunas
@@ -190,10 +164,10 @@ export default function Esgoto() {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("Carrinho")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Orcamento")}>
           <Image
             style={{ right: -10 }}
-            source={require("../../Images/carrinho.png")}
+            source={require("../../Images/orcamento.png")}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -209,8 +183,8 @@ export default function Esgoto() {
       <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
-          tipo="Esgoto"
-          addItem={setEsgoto}
+          tipo="Materiais"
+          addItem={setMateriais}
         />
       </Modal>
 
@@ -221,7 +195,7 @@ export default function Esgoto() {
       >
         <ModalEditarNome
           handleClose={() => setModalVisibleNome(false)}
-          tipo="Esgoto"
+          tipo="Materiais"
           indexDoItemAEditar={indexDoItemAEditar}
         />
 
@@ -233,7 +207,7 @@ export default function Esgoto() {
       >
         <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo="Esgoto"
+          tipo="Materiais"
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -251,7 +225,7 @@ const styles = StyleSheet.create({
     borderColor: "#2506ec",
     borderWidth: 1,
   },
-  esgotoContainer: {
+  materiaisContainer: {
     borderColor: "#2506ec",
     borderWidth: 1,
     borderRadius: 5,
@@ -287,7 +261,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     justifyContent: "space-between",
     alignItems: "center",
-    width: "60%",
+    width: "80%",
     alignSelf: "center",
     flexDirection: "row",
   },

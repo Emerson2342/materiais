@@ -396,9 +396,6 @@ export default function Orcamento() {
 
   const gerarPDF = async () => {
     try {
-      /*  const file = await Print.printToFileAsync({
-                 html: OrcamentoHtml,
-                 base64: false */
       const htmlString = OrcamentoHtml({ orcamento });
       const file = await Print.printToFileAsync({
         html: htmlString,
@@ -430,7 +427,6 @@ export default function Orcamento() {
   return (
     <View>
       <View style={styles.container}>
-        {/* <HTML source={{ html: OrcamentoHtml({ orcamento }) }} contentWidth={300} /> */}
         <FlatList
           data={orcamento}
           renderItem={renderItem}
@@ -460,7 +456,7 @@ export default function Orcamento() {
           style={styles.buttonLimpar}
           onPress={confirmarApagarOrcamento}
         >
-          <Text style={styles.buttonText}>Limpar Lista de Materiais</Text>
+          <Text style={styles.buttonText}>Limpar Lista Orçamento</Text>
         </TouchableOpacity>
       </View>
       <Modal

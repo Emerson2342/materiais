@@ -74,19 +74,21 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite um novo item"
-          value={novoItem.produto}
-          onChangeText={(text) =>
-            setNovoItem({
-              tipo: novoItem.tipo,
-              produto: text,
-              valor: novoItem.valor,
-              quantidade: 1,
-            })
-          }
-        />
+        <View style={styles.precoInputer}>
+          <TextInput
+            style={[styles.input, { width: '100%' }]}
+            placeholder="Digite um novo item"
+            value={novoItem.produto}
+            onChangeText={(text) =>
+              setNovoItem({
+                tipo: novoItem.tipo,
+                produto: text,
+                valor: novoItem.valor,
+                quantidade: 1,
+              })
+            }
+          />
+        </View>
         <View style={styles.precoInputer}>
           <Text style={styles.cifra}>R$</Text>
           <TextInput
@@ -136,13 +138,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   input: {
-    fontSize: 25,
+    fontSize: 23,
+    textAlign: 'center'
   },
   precoInputer: {
     flexDirection: "row",
+    borderRadius: 8,
+    width: "85%",
+    padding: 3,
+    marginVertical: 3,
+    borderWidth: 1,
+    borderColor: "#2506ec",
+
   },
   cifra: {
-    fontSize: 25,
+    fontSize: 23,
   },
   buttonArea: {
     flexDirection: "row",
@@ -151,11 +161,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-    flex: 1,
+    width: "45%",
     alignItems: "center",
     marginTop: 14,
     marginBottom: 14,
     padding: 8,
+    borderWidth: 1,
+    borderColor: "#2506ec",
+    borderRadius: 8,
+
   },
   buttonSave: {
     backgroundColor: "#2506ec",

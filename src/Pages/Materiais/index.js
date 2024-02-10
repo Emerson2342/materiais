@@ -95,6 +95,35 @@ export default function Materiais() {
     }
   };
 
+  const addAoOrcamento = (index) => {
+    const item = materiais[index];
+
+    // Verificar se o produto já existe no carrinho
+    const produtoExistente = orcamento.find(
+      (itemOrcamento) => itemOrcamento.produto === item.produto
+    );
+
+    if (produtoExistente) {
+      Alert.alert("", "Produto já está no orçamento", [
+        { text: "Ok" },
+      ]);
+    } else {
+      // Criar uma cópia do objeto antes de modificar
+      const itemOrcamento = { ...item, cart: "Orcamento" };
+
+      // Adicionar o objeto modificado ao carrinho
+      setOrcamento([...orcamento, itemOrcamento]);
+
+      setNovoItem("", "");
+      Alert.alert("", "Produto adicionado ao Orçamento", [
+        { text: "Ok" },
+      ]);
+      console.log(orcamento);
+    }
+  };
+
+
+
   const confirmar = (indexToRemove) => {
     Alert.alert("", "Deseja apagar o item da lista?", [
       { text: "Não", onPress: () => console.log("Cancelado Exclusão") },
@@ -126,9 +155,12 @@ export default function Materiais() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconContent}
-        // onPress={() => addAoCarrinho(index)}
+          onPress={() => addAoOrcamento(index)}
         >
-          <MaterialIcons name="shopping-cart" size={30} color="#6495ED" />
+          <Image
+            style={{ height: 30, width: 30 }}
+            source={require("../../Images/orcamento.png")}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => addAoListaDeMateriais(index)}>
           <Image

@@ -13,14 +13,6 @@ import "react-native-gesture-handler";
 export default function Principal() {
     const navigation = useNavigation();
 
-    /*     const navigateToPage = () => {
-            navigation.navigate('Materiais');
-        };
-    
-        const imageMapping = {
-            'Materiais': require("../../../assets/images/eletrica.jpg"),
-        }; */
-
     return (
         <View style={styles.container}>
             <View >

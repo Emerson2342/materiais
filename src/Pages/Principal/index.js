@@ -20,7 +20,7 @@ export default function Principal() {
                     style={styles.lista}
                     onPress={() => navigation.navigate("Materiais")}
                 >
-                    <ImageBackground source={require("../../../assets/images/eletrica.jpg")} style={styles.img}>
+                    <ImageBackground source={require("../../Images/eletrica.jpg")} style={styles.img}>
                         <Text style={styles.text}>Materiais</Text>
                     </ImageBackground>
                 </TouchableOpacity>
@@ -49,16 +49,10 @@ export default function Principal() {
 
 const styles = StyleSheet.create({
     container: {
+        top: 50,
         height: "100%",
         margin: 0,
-        backgroundColor: "#ffff",
         alignItems: "center",
-    },
-    lista: {
-        margin: 3,
-        height: 120,
-        justifyContent: "center",
-        //backgroundColor: "#fafa"
     },
     text: {
         color: "#363636",
@@ -76,6 +70,7 @@ const styles = StyleSheet.create({
         borderWidth: 3,
     },
     button: {
+        top: 100,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#2506ec",

@@ -250,7 +250,7 @@ export default function Materiais() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    maxHeight: 500,
+    maxHeight: 300,
     backgroundColor: "#ffffff",
     alignItems: "center",
     elevation: 17,

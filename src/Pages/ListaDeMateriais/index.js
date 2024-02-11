@@ -22,10 +22,11 @@ import * as FileSystem from "expo-file-system";
 
 const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
 
-  const total = listaDeMateriais.reduce(
-    (acc, item) => acc + item.valor * item.quantidade,
-    0
-  );
+  //valor da data atual
+  var dataAtual = new Date();
+
+  // Formata a data como string
+  var dataFormatada = "Brasília, " + dataAtual.toLocaleDateString();
 
   return `
     <!DOCTYPE html>
@@ -117,7 +118,7 @@ const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
     </head>
     
     <body>
-        <div class="logo">
+            <div class="logo">
         <img 
         style="height: 100px;"
         src=
@@ -164,14 +165,16 @@ const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
     </table>
     <br>
    
-                        <div class="data">
-                        <p style="font-size: large;">Brasília, 17 de Janeiro de 2024</p>
-                        <p>Validade do Orçamento: 30 dias</p>
-                                           </div>
-                </body>
+    <div class="data">
+    <p style="font-size: large;"></p>
+  ${dataFormatada}
+    <p>Validade do Orçamento: 30 dias</p>
+
+</div >
+                </body >
                 
-                </html>
-    `;
+                </html >
+  `;
 };
 
 export default function ListaDeMateriais() {
@@ -356,16 +359,13 @@ export default function ListaDeMateriais() {
 
   const gerarPDF = async () => {
     try {
-      /*  const file = await Print.printToFileAsync({
-                 html: ListaDeMateriaisHtml,
-                 base64: false */
       const htmlString = ListaDeMateriaisHtml({ listaDeMateriais });
       const file = await Print.printToFileAsync({
         html: htmlString,
         base64: false,
       });
       // Diretório onde você quer salvar o PDF
-      const pastaListaDeMateriaissSalvos = `${FileSystem.documentDirectory}assets/`;
+      const pastaListaDeMateriaissSalvos = `${FileSystem.documentDirectory} assets / `;
 
       // Garantir que o diretório exista
       await FileSystem.makeDirectoryAsync(pastaListaDeMateriaissSalvos, {
@@ -373,7 +373,7 @@ export default function ListaDeMateriais() {
       });
 
       // Caminho para o arquivo no diretório específico
-      const caminhoNoDiretorio = `${pastaListaDeMateriaissSalvos}ListaDeMateriais.pdf`;
+      const caminhoNoDiretorio = `${pastaListaDeMateriaissSalvos} Lista de Materiais.pdf`;
 
       // Mover o arquivo para o diretório específico
       await FileSystem.moveAsync({
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
     paddingRight: 15,
-    maxHeight: 400,
+    maxHeight: 300,
     backgroundColor: "#ffffffff",
     elevation: 17,
     borderColor: "#2506ec",
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    top: 465,
+    top: 310,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#2506ec",
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   buttonLimpar: {
-    top: 530,
+    top: 380,
     backgroundColor: "#2506ec",
     borderRadius: 8,
     padding: 15,

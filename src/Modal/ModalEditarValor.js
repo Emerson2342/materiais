@@ -104,20 +104,10 @@ export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {/* <View style={styles.precoInputer}>
-          <TextInput
-            style={styles.input}
-            value={novoItem.produto}
-            onChangeText={(text) =>
-              setNovoItem((prevItem) => ({
-                ...prevItem,
-                produto: text,
-              }))
-            }
-          />
-        </View> */}
+
         <View style={styles.precoInputer}>
           <Text style={styles.cifra}>R$</Text>
+
           <TextInput
             style={styles.input}
             placeholder="Digite o novo valor"
@@ -129,6 +119,7 @@ export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar
               })
             }
           />
+
         </View>
 
         <View style={styles.buttonArea}>

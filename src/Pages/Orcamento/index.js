@@ -162,7 +162,8 @@ const OrcamentoHtml = ({ orcamento }) => {
                                 <td >${index + 1}</td>
                                 <td>${item.quantidade}</td>
                                 <td style="text-align:left">${item.produto}</td>
-                                <td style="text-align:left">R$ ${item.valor.toFixed(2).replace(".", ",")}</td>
+                                <td style="text-align:center">R$ ${item.valor.replace(".", ",")}</td>
+                                
                             </tr>
                         `
   ).join("")}
@@ -302,7 +303,7 @@ export default function Orcamento() {
           >
             <Text style={styles.textUnidade}>
               R$
-              {(item.valor * 1 || 0).toLocaleString("pt-BR", {
+              {((Number(item.valor) || 0) * 1).toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}

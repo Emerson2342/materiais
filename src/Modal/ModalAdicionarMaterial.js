@@ -8,11 +8,16 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import { useMateriaisContext } from "../Context/MateriaisContext";
+import { useListaDeMateriaisContext } from "../Context/ListaDeMateriaisContext";
+import { useOrcamentoContext } from "../Context/OrcamentoContext";
+import { useReciboContext } from "../Context/ReciboContext";
 
 
-export default function ModalAdicionar({ handleClose, tipo, addItem }) {
-  const { materiais, setMateriais } = useMateriaisContext();
+export default function ModalAdicionarMaterial({ handleClose, tipo }) {
+
+  const { listaDeMateriais, setListaDeMateriais } = useListaDeMateriaisContext();
+  const { orcamento, setOrcamento } = useOrcamentoContext();
+  const { recibo, setRecibo } = useReciboContext();
 
 
   const [novoItem, setNovoItem] = useState({
@@ -31,7 +36,9 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
     if (nomeItem !== "") {
       // Verificar se o produto já existe em alguma lista
       const produtoExistente = [
-        ...materiais
+        ...(listaDeMateriais || []),
+        ...(orcamento || []),
+        ...(recibo || [])
         // Adicione outras listas conforme necessário
       ].find((item) => item.produto === nomeItem);
 
@@ -42,8 +49,10 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
       } else {
         // Determine qual função de atualização do estado usar com base no tipo
         const updateStateFunction =
-          tipo === "Materiais" ? setMateriais
-            : null;
+          tipo === "ListaDeMateriais" ? setListaDeMateriais
+            : tipo === "Orcamento" ? setOrcamento
+              : tipo === "Recibo" ? setRecibo
+                : null;
 
         if (updateStateFunction) {
           // Se a função de atualização do estado for válida, faça a atualização
@@ -112,7 +121,7 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSave]}
-            onPress={adicionarProduto}
+            onPress={() => adicionarProduto()}
           >
             <Text style={styles.buttonSaveText}>Salvar Item</Text>
           </TouchableOpacity>

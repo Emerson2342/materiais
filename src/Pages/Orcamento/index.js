@@ -16,9 +16,13 @@ import ModalEditarNome from "../../Modal/ModalEditarNome";
 import ModalEditarValor from "../../Modal/ModalEditarValor";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { useOrcamentoContext } from "../../Context/OrcamentoContext";
+import { useClienteOrcamentoContext } from "../../Context/ClienteOrcamentoContext";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
+
+import ModalAdicionarCliente from "../../Modal/ModalAdicionarCliente";
+import ModalAdicionarMaterial from "../../Modal/ModalAdicionarMaterial"
 
 const OrcamentoHtml = ({ orcamento }) => {
 
@@ -191,11 +195,13 @@ const OrcamentoHtml = ({ orcamento }) => {
 export default function Orcamento() {
   const navigation = useNavigation();
 
-  const { orcamento, setOrcamento } =
-    useOrcamentoContext();
+  const { orcamento, setOrcamento } = useOrcamentoContext();
+  const { clienteOrcamento, setClienteOrcamento } = useClienteOrcamentoContext();
 
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
+  const [modalVisibleAddMaterial, setModalVisibleAddMaterial] = useState(false);
+  const [modalVisibleAddCliente, setModalVisibleAddCliente] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
 
   const [total, setTotal] = useState(0);
@@ -221,9 +227,7 @@ export default function Orcamento() {
     setOrcamento(novoArray);
   };
 
-  const limparOrcamento = () => {
-    setOrcamento([]);
-  };
+
 
   const confirmarApagarItem = (indexToRemove) => {
     Alert.alert("", "Deseja apagar o item da lista?", [
@@ -235,7 +239,12 @@ export default function Orcamento() {
   const confirmarApagarOrcamento = (index) => {
     Alert.alert("", "Deseja apagar todos os itens do orcamento?", [
       { text: "Não", onPress: () => console.log("Cancelada Exclusão") },
-      { text: "Sim", onPress: () => limparOrcamento() },
+      {
+        text: "Sim", onPress: () => {
+          setOrcamento([]);
+          setClienteOrcamento([])
+        }
+      },
     ]);
   };
 
@@ -373,28 +382,6 @@ export default function Orcamento() {
           )}
         </View>
       </View>
-      <Modal
-        visible={modalVisibleNome}
-        animationType="fade"
-        transparent={true}
-      >
-        <ModalEditarNome
-          handleClose={() => setModalVisibleNome(false)}
-          tipo={"Orcamento"}
-          indexDoItemAEditar={indexDoItemAEditar}
-        />
-      </Modal>
-      <Modal
-        visible={modalVisibleValor}
-        animationType="fade"
-        transparent={true}
-      >
-        <ModalEditarValor
-          handleClose={() => setModalVisibleValor(false)}
-          tipo={"Orcamento"}
-          indexDoItemAEditar={indexDoItemAEditar}
-        />
-      </Modal>
     </View>
   );
 
@@ -430,6 +417,35 @@ export default function Orcamento() {
 
   return (
     <View>
+
+      <View
+        style={{
+          width: "90%",
+          marginLeft: 10,
+        }}
+      >
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ fontSize: 15 }}>Cliente:</Text>
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+            {" "}
+            {clienteOrcamento.cliente}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ fontSize: 15 }}>Telefone:</Text>
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+            {" "}
+            {clienteOrcamento.telefone}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ fontSize: 15 }}>Endereço:</Text>
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+            {" "}
+            {clienteOrcamento.endereco}
+          </Text>
+        </View>
+      </View>
       <View style={styles.container}>
         <FlatList
           data={orcamento}
@@ -437,11 +453,6 @@ export default function Orcamento() {
           keyExtractor={(item, index) => index.toString()}
           numColumns={1} // Configura o número de colunas
         />
-      </View>
-      <View style={{ position: "absolute", alignSelf: "center" }}>
-        <TouchableOpacity style={styles.button} onPress={() => gerarPDF()}>
-          <Text style={styles.buttonText}>Gerar PDF</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.resumo}>
         <View style={styles.resumoContent}>
@@ -455,14 +466,36 @@ export default function Orcamento() {
           </Text>
         </View>
       </View>
-      <View style={{ position: "absolute", alignSelf: "center" }}>
-        <TouchableOpacity
-          style={styles.buttonLimpar}
-          onPress={confirmarApagarOrcamento}
-        >
-          <Text style={styles.buttonText}>Limpar Lista Orçamento</Text>
-        </TouchableOpacity>
+
+
+      <View style={styles.buttonContainer}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setModalVisibleAddCliente(true)}
+          >
+            <Text style={styles.buttonText}>Adicionar Cliente</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setModalVisibleAddMaterial(true)}
+          >
+            <Text style={styles.buttonText}>Adicionar Material</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity style={styles.button} onPress={() => gerarPDF()}>
+            <Text style={styles.buttonText}>Gerar PDF</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => confirmarApagarOrcamento()}
+          >
+            <Text style={styles.buttonText}>Limpar Lista</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
       <Modal
         visible={modalVisibleNome}
         animationType="fade"
@@ -470,7 +503,7 @@ export default function Orcamento() {
       >
         <ModalEditarNome
           handleClose={() => setModalVisibleNome(false)}
-          tipo={"Orcamento"}
+
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -481,8 +514,28 @@ export default function Orcamento() {
       >
         <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo={"Orcamento"}
+
           indexDoItemAEditar={indexDoItemAEditar}
+        />
+      </Modal>
+      <Modal
+        visible={modalVisibleAddCliente}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalAdicionarCliente
+          handleClose={() => setModalVisibleAddCliente(false)}
+          tipo={"Orcamento"}
+        />
+      </Modal>
+      <Modal
+        visible={modalVisibleAddMaterial}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalAdicionarMaterial
+          handleClose={() => setModalVisibleAddMaterial(false)}
+          tipo={'Orcamento'}
         />
       </Modal>
     </View>
@@ -492,34 +545,35 @@ export default function Orcamento() {
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
-    paddingRight: 15,
-    maxHeight: 300,
+    height: 350,
     backgroundColor: "#ffffffff",
-    elevation: 17,
+    elevation: 10,
     borderColor: "#2506ec",
     borderWidth: 1,
+    borderRadius: 5,
+    width: "95%",
+    alignSelf: "center"
   },
   listaContainer: {
-    height: 100,
     borderColor: "#2506ec",
     borderWidth: 1,
-    overflow: "hidden",
     borderRadius: 5,
-    marginVertical: 5,
     paddingLeft: 5,
     paddingRight: 5,
-    elevation: 30,
-    backgroundColor: "#ffffff",
+    elevation: 10,
+    marginVertical: 5,
+    backgroundColor: "#fff",
+    width: "98%"
   },
   textLista: {
     color: "#0045b1",
-    fontSize: 25,
+    fontSize: 20,
   },
 
   textMultiplicar: {
     color: "#123d4e",
     textAlign: "center",
-    fontSize: 35,
+    fontSize: 25,
   },
   textUnidade: {
     color: "#2f6f68",
@@ -531,31 +585,30 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
+  buttonContainer: {
+    width: "95%",
+    paddingTop: 5,
+    marginLeft: 10,
+    marginRight: 10,
+  },
   button: {
-    top: 380,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop: 5,
     backgroundColor: "#2506ec",
     borderRadius: 8,
-    padding: 15,
-    alignSelf: "center",
+    paddingTop: 10,
+    paddingBottom: 10,
     elevation: 8,
+    width: "48%",
   },
-  buttonLimpar: {
-    top: 450,
-    backgroundColor: "#2506ec",
-    borderRadius: 8,
-    padding: 15,
-    elevation: 8,
-  },
+
   buttonText: {
+    textAlign: 'center',
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
   },
   superior: {
     width: "100%",
-    height: "60%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -595,8 +648,6 @@ const styles = StyleSheet.create({
     width: "30%",
   },
   resumo: {
-    position: "absolute",
-    top: 300,
     margin: 10,
     width: "93%",
     flexDirection: "row",

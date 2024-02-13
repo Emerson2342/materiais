@@ -15,8 +15,10 @@ import { useNavigation } from "@react-navigation/native";
 import ModalEditarNome from "../../Modal/ModalEditarNome";
 import ModalEditarValor from "../../Modal/ModalEditarValor";
 
-import ModalAddListaMateriais from "./modalAddListaDeMateriais";
-import ModalAddCliente from "./modalAddCliente";
+import ModalAdicionarCliente from "../../Modal/ModalAdicionarCliente";
+import ModalAdicionarMaterial from "../../Modal/ModalAdicionarMaterial"
+
+
 
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { useListaDeMateriaisContext } from "../../Context/ListaDeMateriaisContext";
@@ -155,16 +157,16 @@ const ListaDeMateriaisHtml = ({ listaDeMateriais }) => {
             </thead>
             <tbody> 
                         ${listaDeMateriais
-                          .map(
-                            (item, index) => `
+      .map(
+        (item, index) => `
                             <tr key=${index}>
                                 <td >${index + 1}</td>
                                 <td>${item.quantidade}</td>
                                 <td style="text-align:left">${item.produto}</td>
                                                             </tr>
                         `
-                          )
-                          .join("")}
+      )
+      .join("")}
                         </tbody>
     </table>
     <br>
@@ -190,11 +192,9 @@ export default function ListaDeMateriais() {
   const { clienteMateriais, setClienteMateriais } =
     useClienteMateriaisContext();
 
-  // const [listaDeMateriais, setListaDeMateriais] = useState([]);
-
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
-  const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
+  const [modalVisibleAddMaterial, setModalVisibleAddMaterial] = useState(false);
   const [modalVisibleAddCliente, setModalVisibleAddCliente] = useState(false);
 
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
@@ -384,7 +384,7 @@ export default function ListaDeMateriais() {
         </View>
       </View>
       <View style={styles.container}>
-        {/* <HTML source={{ html: ListaDeMateriaisHtml({ listaDeMateriais }) }} contentWidth={300} /> */}
+
         <FlatList
           data={listaDeMateriais}
           renderItem={renderItem}
@@ -402,7 +402,7 @@ export default function ListaDeMateriais() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => setModalVisibleAdd(true)}
+            onPress={() => setModalVisibleAddMaterial(true)}
           >
             <Text style={styles.buttonText}>Adicionar Material</Text>
           </TouchableOpacity>
@@ -437,15 +437,25 @@ export default function ListaDeMateriais() {
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
-      <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
-        <ModalAddListaMateriais handleClose={() => setModalVisibleAdd(false)} />
-      </Modal>
       <Modal
         visible={modalVisibleAddCliente}
         animationType="fade"
         transparent={true}
       >
-        <ModalAddCliente handleClose={() => setModalVisibleAddCliente(false)} />
+        <ModalAdicionarCliente
+          handleClose={() => setModalVisibleAddCliente(false)}
+          tipo={"ListaDeMateriais"}
+        />
+      </Modal>
+      <Modal
+        visible={modalVisibleAddMaterial}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalAdicionarMaterial
+          handleClose={() => setModalVisibleAddMaterial(false)}
+          tipo={'ListaDeMateriais'}
+        />
       </Modal>
     </View>
   );
@@ -454,12 +464,14 @@ export default function ListaDeMateriais() {
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
-    paddingRight: 15,
-    maxHeight: 300,
+    height: 400,
     backgroundColor: "#ffffffff",
-    elevation: 17,
+    elevation: 10,
     borderColor: "#2506ec",
     borderWidth: 1,
+    borderRadius: 5,
+    width: "95%",
+    alignSelf: "center"
   },
   listaContainer: {
     borderColor: "#2506ec",
@@ -468,14 +480,14 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     paddingLeft: 5,
     paddingRight: 5,
-    elevation: 30,
-    backgroundColor: "#ffffff",
+    elevation: 10,
+    backgroundColor: "#fff",
+    width: "98%"
   },
   textLista: {
     color: "#0045b1",
     fontSize: 20,
   },
-
   textMultiplicar: {
     color: "#123d4e",
     textAlign: "center",
@@ -484,8 +496,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "95%",
     paddingTop: 5,
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: 10,
+    marginRight: 10,
   },
   button: {
     marginTop: 5,

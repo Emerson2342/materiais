@@ -8,16 +8,19 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 
-import { useMateriaisContext } from "../Context/MateriaisContext";
-import { useOrcamentoContext } from "../Context/OrcamentoContext";
 import { useListaDeMateriaisContext } from "../Context/ListaDeMateriaisContext";
+import { useOrcamentoContext } from "../Context/OrcamentoContext";
+import { useReciboContext } from "../Context/ReciboContext";
+
+
 
 export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar }) {
 
-  const { materiais, setMateriais } = useMateriaisContext();
-  const { orcamento, setOrcamento } = useOrcamentoContext();
   const { listaDeMateriais, setListaDeMateriais } =
     useListaDeMateriaisContext();
+  const { orcamento, setOrcamento } = useOrcamentoContext();
+  const { recibo, setRecibo } = useReciboContext();
+
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
@@ -30,8 +33,8 @@ export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar
     // Carregar o valor atual do item a ser editado quando o modal é aberto
     if (indexDoItemAEditar !== null && indexDoItemAEditar !== undefined) {
       const itemAEditar =
-        tipo === "Materiais"
-          ? materiais[indexDoItemAEditar]
+        tipo === "Recibo"
+          ? recibo[indexDoItemAEditar]
           : tipo === "Orcamento"
             ? orcamento[indexDoItemAEditar]
             : tipo === "ListaDeMateriais"
@@ -45,7 +48,7 @@ export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar
     }
   }, [
     indexDoItemAEditar,
-    materiais,
+    recibo,
     orcamento,
     listaDeMateriais,
     tipo,
@@ -63,8 +66,8 @@ export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar
     if (!isNaN(novoProduto) && novoItem.produto.trim() !== "") {
       // Crie uma cópia da lista correspondente ao tipo
       const novaLista =
-        tipo === "Materiais"
-          ? [...materiais]
+        tipo === "Recibo"
+          ? [...recibo]
           : tipo === "Orcamento"
             ? [...orcamento]
             : tipo === "ListaDeMateriais"
@@ -75,8 +78,8 @@ export default function ModalEditarValor({ handleClose, tipo, indexDoItemAEditar
       novaLista[indexDoItemAEditar] = { ...novoItem };
 
       // Atualize o estado com a nova lista
-      if (tipo === "Materiais") {
-        setMateriais(novaLista);
+      if (tipo === "Recibo") {
+        setRecibo(novaLista);
       } else if (tipo === "Orcamento") {
         setOrcamento(novaLista);
       } else if (tipo === "ListaDeMateriais") {

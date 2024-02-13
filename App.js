@@ -15,7 +15,6 @@ import { ReciboContextProvider } from "./src/Context/ReciboContext";
 import Principal from "./src/Pages/Principal";
 import ListaDeMateriais from "./src/Pages/ListaDeMateriais";
 import Orcamento from "./src/Pages/Orcamento";
-
 import Recibo from "./src/Pages/Recibo";
 
 import Header from "./src/Components/header";

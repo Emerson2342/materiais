@@ -1,21 +1,61 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
+
+//Context
+import { MateriaisContextProvider } from "./src/Context/MateriaisContext";
+import { ListaDeMateriaisContextProvider } from "./src/Context/ListaDeMateriaisContext";
+import { OrcamentoContextProvider } from "./src/Context/OrcamentoContext";
+import { ClienteMateriaisContextProvider } from "./src/Context/ClienteMateriaisContext";
+
+//Páginas
+import Principal from "./src/Pages/Principal";
+//import Materiais from '.src/Pages/Materiais';
+import ListaDeMateriais from "./src/Pages/ListaDeMateriais";
+import Orcamento from "./src/Pages/Orcamento";
+
+import Materiais from "./src/Pages/Materiais";
+
+import Header from "./src/Components/header";
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <ClienteMateriaisContextProvider>
+        <MateriaisContextProvider>
+          <ListaDeMateriaisContextProvider>
+            <OrcamentoContextProvider>
+              <Header />
+              <StatusBar backgroundColor="#2506ec" />
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="Principal"
+                  component={Principal}
+                  options={{ headerShown: false }}
+                />
+
+                <Stack.Screen
+                  name="Lista de Materiais"
+                  component={ListaDeMateriais}
+                />
+                <Stack.Screen name="Orcamento" component={Orcamento} />
+                <Stack.Screen name="Materiais" component={Materiais} />
+              </Stack.Navigator>
+            </OrcamentoContextProvider>
+          </ListaDeMateriaisContextProvider>
+        </MateriaisContextProvider>
+      </ClienteMateriaisContextProvider>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -8,15 +8,16 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 
-import { useMateriaisContext } from "../Context/MateriaisContext";
-import { useOrcamentoContext } from "../Context/OrcamentoContext";
 import { useListaDeMateriaisContext } from "../Context/ListaDeMateriaisContext";
+import { useOrcamentoContext } from "../Context/OrcamentoContext";
+import { useReciboContext } from "../Context/ReciboContext";
+
 
 export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar }) {
 
-  const { materiais, setMateriais } = useMateriaisContext();
-  const { orcamento, setOrcamento } = useOrcamentoContext();
   const { listaDeMateriais, setListaDeMateriais } = useListaDeMateriaisContext();
+  const { orcamento, setOrcamento } = useOrcamentoContext();
+  const { recibo, setRecibo } = useReciboContext();
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
@@ -29,12 +30,12 @@ export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar 
     // Carregar o valor atual do item a ser editado quando o modal é aberto
     if (indexDoItemAEditar !== null && indexDoItemAEditar !== undefined) {
       const itemAEditar =
-        tipo === "Materiais"
-          ? materiais[indexDoItemAEditar]
+        tipo === "ListaDeMateriais"
+          ? listaDeMateriais[indexDoItemAEditar]
           : tipo === "Orcamento"
             ? orcamento[indexDoItemAEditar]
-            : tipo === "ListaDeMateriais"
-              ? listaDeMateriais[indexDoItemAEditar]
+            : tipo === "Recibo"
+              ? recibo[indexDoItemAEditar]
               : null;
 
       if (itemAEditar) {
@@ -44,9 +45,9 @@ export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar 
     }
   }, [
     indexDoItemAEditar,
-    materiais,
-    orcamento,
     listaDeMateriais,
+    orcamento,
+    recibo,
     tipo,
   ]);
 
@@ -60,24 +61,24 @@ export default function ModalEditarNome({ handleClose, tipo, indexDoItemAEditar 
     if (!isNaN(novoProduto) && novoItem.produto.trim() !== "") {
       // Crie uma cópia da lista correspondente ao tipo
       const novaLista =
-        tipo === "Materiais"
-          ? [...materiais]
+        tipo === "ListaDeMateriais"
+          ? [...listaDeMateriais]
           : tipo === "Orcamento"
             ? [...orcamento]
-            : tipo === "ListaDeMateriais"
-              ? [...listaDeMateriais]
+            : tipo === "Recibo"
+              ? [...recibo]
               : [];
 
       // Atualize o valor do item específico na cópia da lista
       novaLista[indexDoItemAEditar] = { ...novoItem };
 
       // Atualize o estado com a nova lista
-      if (tipo === "Materiais") {
-        setMateriais(novaLista);
+      if (tipo === "ListaDeMateriais") {
+        setListaDeMateriais(novaLista);
       } else if (tipo === "Orcamento") {
         setOrcamento(novaLista);
-      } else if (tipo === "ListaDeMateriais") {
-        setListaDeMateriais(novaLista);
+      } else if (tipo === "Recibo") {
+        setRecibo(novaLista);
       }
       // Adicione mais blocos else if para outros tipos, se necessário
 
